@@ -1,0 +1,2 @@
+ErrorDocument 404 /dn5600/235/error/error.html
+DirectoryIndex noterror.html
