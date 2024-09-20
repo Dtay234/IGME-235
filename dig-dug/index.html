@@ -9,26 +9,29 @@
         h1 { 
             color:red;
             font-family: sans-serif;
-            border-bottom: 1px solid blue;
+            border-bottom: 1px solid rgb(0, 0, 0);
             margin-left: 50px;
             }
         blockquote { 
-            background-color: lightgray;
+            background-color: #FF8C53;
             padding: 1rem;
             }
         body {
-                background-color:lightblue;
+                background-color:#8E443D;
             }
-            h2 {
-                color:blueviolet;
+        h2 {
+                color:#8E443D;
                 margin-left: 50px;
             }
-            p {
+        p {
                 margin-left: 50px;
             }
-            li {
+            ul {
                 margin-left: 50px;
+                margin-right: 50px;
+                background-color: #FF8C53;
             }
+            
             img {
                 margin-left: 50px;
                 
@@ -40,6 +43,21 @@
             title {
                 margin-left: 75px;
             }
+            a {text-decoration: none;}
+            a:link {color:#ffd644;
+            border: 2px solid #ffd644;
+            padding:5px}        
+            a:visited {color:gray}
+            a:focus {color:#FF8C53;
+            border-color: #FF8C53;
+        background-color: #ffd644;}
+            a:hover {color:#FF8C53;
+            border-color: #FF8C53;
+        background-color: #ffd644;}
+        a:active {color:white; background-color: bisque; border-color: white;}
+
+        main, header, footer {border: 1px solid black;margin:0 auto; width:60%;background-color: #E4A66C;}
+            
             
     </style>
     
@@ -71,16 +89,16 @@
         
 
             <img src="images/dig-dug-burnt.png" alt="dig dug screenshot">
-        
-    <p><a href="big/pic1.html"><br>More pictures</a></p>
+        <br>
+    <p><a href="big/pic1.html">More pictures</a></p>
     
     
     
     <p>
         <i>Dig Dug</i> is a 1-2 player arcade game in which you have to use your shovel to dig your way through the earth. Stopping you from doing this are two monsters, called Pooka and Fygar,
-        who will continually chase you around.<br> The only weapon that you carry is an air pump, which you can use to inflate the monsters to the point where they <b>explode</b>. [...]
+        who will continually chase you around. The only weapon that you carry is an air pump, which you can use to inflate the monsters to the point where they <b>explode</b>. [...]
     </p>
-        </main>
+        
 
         <img src="images/fygar_inflate.jpg" alt="fygar inflate" class="right">
         
@@ -89,7 +107,7 @@
 <h2>Game Categories</h2>
 
 
-<ul>
+<ul id="shorter">
     <li>Perspective: Side view</li>
     <li>Visual: Fixed</li>
     <li>Gameplay: Arcade</li>
@@ -103,7 +121,7 @@
     -- https://www.mobygames.com/mobyrank/source/sourceId,540/
 </blockquote>
 	
-
+</main>
 <br><br><br><br><br><br><br><br><br>
 <footer>
     <p id="source">
