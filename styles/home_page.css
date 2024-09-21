@@ -65,7 +65,7 @@ div.sidebar {
     background-color: white;
     /*justify-content: space-between;*/
 }
-#sidebar_content {
+p.sidebar_content {
     width:90%;
     margin: 1em auto 0.5em;
 }
@@ -88,4 +88,7 @@ a:hover {
 }
 a:active {
     background-color: black;
+}
+#github {
+    margin: auto auto auto 37%;
 }
