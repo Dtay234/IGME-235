@@ -1,12 +1,14 @@
 #face {
     width:90%;
-    margin: 1.75em auto;
+    margin: 1.5em auto 1em;
     
     border-radius: 20px;
 }
 body {
-    font-family: monospace;
+    font-family: sans-serif;
     margin: 3em;
+    background-color: rgb(245, 216, 173);
+    
 }
 h1 {
     margin: 1.5em auto 1.5em 1em;
@@ -15,39 +17,75 @@ div.project_list {
     list-style-type:none;
     display:flex;
     flex-direction: column;
+    width:100%;
 }
 div.project_list div.project {
-    background-color: lightgrey;
+    background-color: rgb(255, 255, 255);
     padding: 2em;
     border-radius: 20px;
     width:60%;
     margin-bottom: 3em;
-    
+    border-left: 10px solid rgb(92, 64, 15);
     flex:1 1 auto;
 }
 div.project_list div.project a {
     float:right;
-    background-color: blue;
+    background-color: rgb(221, 152, 50);
     border-radius: 10px;
     color: white;
     padding: 5px 15px;
     text-decoration: none;
     font-weight: bold;
     font-size:x-large;
+    
+}
+div.project_list div.project a:visited {
+    background-color: lightgray;
+}
+div.project_list div.project a:focus {
+    background-color: blanchedalmond;
+}
+div.project_list div.project a:hover {
+    background-color: chocolate;
+}
+div.project_list div.project a:active {
+    background-color: blanchedalmond;
 }
 div.sidebar {
-    
+    position: relative;
+    top: 20px;
     width:30%;
     right:0;
-    margin: 0 3em 0 auto;
-    border: 2px solid black;
-    border-radius: 20px;
+    margin: 0 2.5em 0 auto;
+    border: 6px solid rgb(92, 64, 15);
+    border-radius: 25px;
     display: flex;
     flex-direction: column;
     position: fixed;
-    justify-content: space-between;
+    background-color: white;
+    /*justify-content: space-between;*/
 }
 #sidebar_content {
     width:90%;
-    margin: 1em auto;
+    margin: 1em auto 0.5em;
+}
+a {
+    text-decoration: none;
+}
+a:link {
+    color: rgb(221, 152, 50);
+}
+a:visited {
+    color: rgb(92, 64, 15);
+}
+a:focus {
+    background-color: chocolate;
+    color: white;
+}
+a:hover {
+    background-color: chocolate;
+    color: white;
+}
+a:active {
+    background-color: black;
 }
