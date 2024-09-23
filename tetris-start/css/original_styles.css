@@ -1,0 +1,32 @@
+
+body {
+    margin:5em;
+}
+h2 {
+    border-bottom: 2px solid red;
+    clear:right;
+}
+figure {
+    float:right;
+    width:40%;
+    margin-left:10%;
+}
+figure img {
+    width:100%;
+}
+div.tet {
+width: 20%;
+float:left;
+border:1px dotted black;
+}
+div.tet img {
+    width:50%;
+
+}
+footer {
+    clear:left;
+    position: fixed; 
+    top:0px;
+    left:70%;
+    z-index: -1;
+}
