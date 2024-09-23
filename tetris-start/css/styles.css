@@ -19,16 +19,19 @@ div.tet {
     text-align: center;
 }
 
-#tetlist img {
+div.tet img {
     width:60%;
     
     margin:2vw auto;
 }
-div.square img {
-    width:2px;  /*idk why this isnt working*/
-    border:2px solid blue
+div.tet.square img {
+    width:40%;  
 }
-span {
+div.tet.long img {
+    width:75%;
+    margin-bottom: 12ex;
+}
+span.name {
     display:block;
     font-weight: bold;
     font-size: 20pt;
