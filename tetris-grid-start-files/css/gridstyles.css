@@ -1,0 +1,86 @@
+body {
+    margin: 1rem;
+
+}
+#wrapper {
+    display: grid;
+    grid-template-areas:
+    "logo" 
+    "menu" 
+    "intro" 
+    "playground" 
+    "footer";
+    
+    @media screen and (min-width:850px) {
+        grid-template-areas:
+        "logo       intro"
+        "menu       menu"
+        "playground playground"
+        "footer     footer";
+
+        grid-template-columns: 500px 1fr;
+        grid-template-rows: 345px auto auto auto;
+    
+    }
+
+}
+h1.game { 
+    grid-area: logo; 
+    width:500px;
+    height:345px;
+    background: url(../images/tetris-logo.png) no-repeat;
+    text-indent: -9999px;
+}
+ul.menu { 
+    grid-area: menu; 
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+
+}
+.menu a {
+    display: block;
+    background: gray;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+
+}
+.menu li {
+    width: 25%;
+}
+@media screen and (max-width: 550px) {
+	.menu li {
+		width: 100%;
+	}
+}
+.menu a:hover {
+	background: red;
+	color: yellow;
+}
+#introduction { 
+    grid-area: intro; 
+    margin: 2rem;
+}
+#tetgrid { grid-area: playground; }
+footer { grid-area: footer; }
+ul.menu ul li {
+    width:100%;
+}
+ul.menu ul {
+    display:none;
+}
+ul.menu li:hover ul {
+    display:flex;
+}
+.menu .submenu li>a:hover {
+    background:red;
+    color:yellow;
+}
+.menu .submenu>a:after {
+    content: "+";
+    padding-left:5px;
+}
+
