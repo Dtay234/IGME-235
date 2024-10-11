@@ -1,0 +1,131 @@
+html {
+    font-family: sans-serif;
+}
+body {
+    
+    margin: 0 auto;
+    background-color: black;
+    color:white;
+    text-align: justify;
+}
+#banner {
+    background-image: url("images/bannerPic.jpg");
+    height:50vh;
+    width:65vw;
+    margin: 0 auto 1em;
+}
+#banner>div {
+    margin-left: 2.5vw;
+}
+#banner p {
+    position:relative;
+    top: -5ex;
+    width:77%;
+    text-align: justify;
+}
+#logo {
+    width:10%;
+}
+#logo1 {
+    width:100%;
+    font-weight: bolder;
+    text-align: justify;
+}
+#logo2 {
+    width:100%;
+    font-weight: 50;
+    text-align: justify;
+    border-bottom: 2ex solid whitesmoke;
+}
+h1 {
+    font-size:42pt;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    position:relative;
+    top:-1ex;
+}
+h2 {
+    font-size: 23pt;
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 100;
+}
+h3 {
+    color:aquamarine
+}
+main {
+    width:60vw;
+    margin: 0 auto;
+    display:grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: 
+    "back back side"
+    "graph graph side"
+    "graph graph side"
+    "boxes boxes boxes";
+}
+#background {
+    grid-area: back;
+    width: 95%;
+}
+#side {
+    grid-area: side;
+    display: flex;
+    flex-direction: column;
+    margin-left: 1em;
+}
+#bio {
+    display:flex;
+    justify-content: space-between;
+    font-size: 80%;
+}
+#bio img {
+    width:30%;
+    height:auto;
+    margin: auto 2em auto 0;
+    border-radius: 100px;
+}
+#graph {
+    grid-area: graph;
+    width:90%;
+    height:100%;
+}
+#boxes {
+    grid-area: boxes;
+    display: flex;
+    justify-content: space-between;
+} 
+div.card {
+    background-color: white;
+    color:black;
+    padding: 5px;
+    margin:auto;
+    width:30%;
+    position: relative;
+}
+div.number {
+    position: absolute;
+    top: -2ex;
+    left: -0.9em;
+    background-color: rgb(98, 192, 161);
+    padding: 0.75ex 1.5ex;
+    border-radius: 20px;
+    color:white;
+}
+div.card p {
+    width:80%;
+    margin: 2ex auto;
+    text-align:justify;
+}
+footer {
+    display:flex;
+    width: 60vw;
+    margin: 0 auto;
+}
+footer div {
+    width:50%;
+    margin-right: 20px;
+}
+div.line {
+    width: 100%;
+    border-bottom: 2px solid gray;
+}
