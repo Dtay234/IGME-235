@@ -73,21 +73,23 @@ a.card {
     bottom:0;
     transition: bottom 0.2s;
     background-color: rgb(0, 0, 0);
-    padding: 2vw 2vw 0px; 
+    padding: 4vh 2vw 4vh; 
     border-bottom: 5px solid rgb(46, 46, 46);
     border-top: 5px solid rgb(46, 46, 46);
     margin:2vh auto;
+    min-width: 300px;
+    max-width: 600px;
 }
 a.card:hover {
     bottom:5px;
 }
 a.card img {
-    width: 27vw;
-    height: 33vh;
+    width: 105%;
+    height: 60%;
     border-radius: 20px;
     border-bottom: 8vh;
     position: relative;
-    left: -1vw;
+    left: -2.5%;
     overflow: hidden;
     
 }
@@ -95,5 +97,18 @@ a.card img {
     display:flex;
     flex-wrap: wrap;
     margin-top:10px;
-    flex: 1 0 auto;
+}
+@media screen and (max-width:1200px) {
+    nav {
+        flex-wrap: wrap;
+        height:auto;
+        padding: 10px;
+    }
+}
+
+@media screen and (min-width:1920px) {
+    body {
+        font-size: x-large;
+    }
+    
 }

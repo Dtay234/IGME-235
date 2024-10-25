@@ -38,6 +38,7 @@ body {
     background-image: url("images/portfolioBanner.jpg");
     background-size: 100%;
     background-position: 100%;
+    background-repeat: no-repeat;
     height:50vh;
     width:100%;
     margin: 0 auto 1em;
@@ -81,6 +82,7 @@ main {
     justify-content: stretch;
     
 }
+
 main>div {
     margin:1em;
     
@@ -210,7 +212,7 @@ a {
     border-radius: 20px;
    
     background-color: rgb(0, 0, 0);
-    padding: 2vw 2vw 0px; 
+    padding: 4vh 2vw 4vh; 
     border-bottom: 5px solid rgb(46, 46, 46);
     border-top: 5px solid rgb(46, 46, 46);
     margin:2vh auto;
@@ -226,12 +228,77 @@ a {
     }
 }
 #highlighted img {
-    width: 27vw;
+    width: 105%;
     height: 33vh;
     border-radius: 20px;
     border-bottom: 8vh;
     position: relative;
-    left: -1vw;
+    left: -2.5%;
     overflow: hidden;
     
+}
+@media screen and (max-width:1200px) {
+    main {
+        
+        grid-template-rows: auto auto auto auto auto;
+        grid-template-columns: 100%;
+        grid-template-areas: 
+        "about"
+        "side"
+        "side"
+        "cards"
+        "cards";
+        justify-content: stretch;
+        
+    }
+    #highlighted {
+        width: 400px;
+        height: auto;
+    }
+    #highlighted img {
+        width:420px;
+    }
+    #pages a:focus {
+        div.page {
+            height:20vw;
+            div.images {
+                height:75%;
+            }
+            em {
+                color:gray;
+            }
+        }
+    }
+    #pages a:hover {
+        div.page {
+            height:20vw;
+            div.images {
+                height:75%;
+            }
+            em {
+                color:gray;
+            }
+        }
+    }
+    nav {
+        flex-wrap: wrap;
+        height:auto;
+        padding: 10px;
+    }
+    #banner {
+        background-size: 150%;
+        background-position: 50%;
+        position: relative;
+        top:-10vh;
+    }
+    #about {
+        margin-top: 0;
+        margin-bottom: 5vh;
+    }
+}
+
+@media screen and (min-width:1920px) {
+    body {
+        font-size: x-large;
+    }
 }
