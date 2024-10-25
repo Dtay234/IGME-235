@@ -1,6 +1,7 @@
 html {
     font-family: sans-serif;
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 nav {
     display: flex;
@@ -10,10 +11,18 @@ nav {
     position: sticky;
     top:0;
     margin:auto 0 0 0;
-    border-bottom: 7px solid rgb(191, 217, 238);;
+    border-bottom: 7px solid rgb(191, 217, 238);
     z-index: 1;
     align-items: center;
     justify-content: space-around;
+}
+nav a {
+    padding: 0.5em;
+    border: 2px solid rgb(191, 217, 238);
+    border-radius: 10px;
+}
+nav a:hover {
+    background-color: rgb(78, 78, 78);
 }
 body {
     
@@ -23,9 +32,7 @@ body {
     width:100%;
     
 }
-a {
-    text-decoration: none;
-}
+
 #banner {
     padding-top: 5vh;;
     background-image: url("images/portfolioBanner.jpg");
@@ -65,12 +72,12 @@ h3 {
 main {
     width:100%;
     display:grid;
-    grid-template-rows: 20vh auto 20vh;
+    grid-template-rows: 25vh auto 10vh;
     grid-template-columns: 2fr 1fr;
     grid-template-areas: 
     "about side"
     "cards side"
-    "footer footer";
+    "cards side";
     justify-content: stretch;
     
 }
@@ -97,7 +104,7 @@ div.page {
     
     
 }
-a:focus {
+#pages a:focus {
     div.page {
         height:30vh;
         div.images {
@@ -108,7 +115,7 @@ a:focus {
         }
     }
 }
-a:hover {
+#pages a:hover {
     div.page {
         height:30vh;
         div.images {
@@ -119,7 +126,7 @@ a:hover {
         }
     }
 }
-a:active {
+#pages a:active {
     div.page {
         background-color: rgb(39, 39, 39);
         border: 2px solid whitesmoke
@@ -144,35 +151,27 @@ div.images img {
     display: flex;
     flex-direction: column;
     margin-left: 1em;
+    justify-content: center;
 }
-#bio {
-    display:flex;
-    justify-content: space-between;
-    font-size: 80%;
-}
-#bio img {
-    width:30%;
+
+#about img {
+    width:10vw;
     height:auto;
     margin: auto 2em auto 0;
-    border-radius: 100px;
+    border-radius: 100%;
 }
 #about {
     grid-area: about;
-    margin: 2% 2.5rem 0;
+    margin: 4vh 2.5rem 0vh;
+    display:flex;
 }
 
-footer {
-    display:flex;
-    width: 60vw;
-    margin: 0 auto;
-}
-footer div {
-    width:50%;
-    margin-right: 20px;
-}
+
+
 div.line {
     width: 100%;
     border-bottom: 2px solid gray;
+    margin: 4vh 0;
 }
 em {
     color:rgb(27, 27, 27);
@@ -184,6 +183,55 @@ a {
     color:rgb(191, 217, 238);
     text-decoration: none;;
 }
-div {
-    /*border: 1px dashed white;*/
+#contactLink {
+    color:white;
+    border-color: white;
+}
+#contact {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2.25em;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5vh;
+}
+#contact h3 {
+    margin: 0 20vw 2vw;
+}
+#contact p {
+    margin: auto 2vw;
+}
+#side h3 {
+    margin: 0 auto;
+}
+#highlighted {
+    width:25vw;
+    height:60vh;
+    border-radius: 20px;
+   
+    background-color: rgb(0, 0, 0);
+    padding: 2vw 2vw 0px; 
+    border-bottom: 5px solid rgb(46, 46, 46);
+    border-top: 5px solid rgb(46, 46, 46);
+    margin:2vh auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color:white;
+    h3 {
+        color:rgb(191, 217, 238);
+        margin-left: 0;
+        position: relative;
+        top: 2%
+    }
+}
+#highlighted img {
+    width: 27vw;
+    height: 33vh;
+    border-radius: 20px;
+    border-bottom: 8vh;
+    position: relative;
+    left: -1vw;
+    overflow: hidden;
+    
 }
