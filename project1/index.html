@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <title>Portfolio</title>
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="CSS/styles.css">
 
         
     </head>
@@ -11,9 +11,9 @@
         <nav>
             <a href="#banner">Home</a>
             <h4>Projects:</h4>
-            <a href="/project-1/project-pages/professional.html">Professional</a>
-            <a href="/project-1/project-pages/class.html">Class</a>
-            <a href="/project-1/project-pages/personal.html">Personal</a>
+            <a href="professional.html">Professional</a>
+            <a href="class.html">Class</a>
+            <a href="personal.html">Personal</a>
             <a href="#highlighted" id="highlightLink">Highlighted</a>
             <a href="#contact" id="contactLink">Contact</a>
         </nav>
@@ -27,7 +27,7 @@
         <main>
             <div id="about">
                     
-                <img src="images/face.jpg" alt="portrait">
+                <img src="media/face.jpg" alt="portrait">
                 <div id="bio">
                     <h3>About</h3>
                     <p>
@@ -43,46 +43,43 @@
             <div id="side">
                 <h3>Highlighted Work</h3>
                 <a href="https://owenluts.itch.io/mother-wake-up" id="highlighted" class="card" target="_blank">
-                    <img src="images/mother_wake_up_thumbnail.png" alt="">
+                    <img src="media/mother_wake_up_thumbnail.png" alt="">
                     <h3>Mother, Wake Up</h3>
                     <h5>Roles: Art, Design, Programming, Music<br>Skills: Godot, GDScript</h5>
                     <p>Mother, Wake Up is a psycological game about a helping your listless mother recover after the death of your brother. However, the help comes at a cost...</p>
                 </a>    
                 
-                <div id="results">
-                   
-                </div>
             </div>
             <div id="pages">
                 <div class="line"></div>
                 <h2>Projects</h2>
-                <a href="project-pages/professional.html">
+                <a href="professional.html">
                     <div class="page">
                         <h3>Professional<em>  -  click to see more</em></h3>
                         <div class="images">
-                            <img src="images/lightning.png" alt="">
-                            <img src="images/boat_and_sky.png" alt="">
-                            <img src="images/ny.png" alt="">
+                            <img src="media/lightning.png" alt="">
+                            <img src="media/boat_and_sky.png" alt="">
+                            <img src="media/ny.png" alt="">
                         </div>
                     </div>
                 </a>
-                <a href="project-pages/personal.html">
+                <a href="class.html">
                     <div class="page">
                         <h3>Class<em>  -  click to see more</em></h3>   
                         <div class="images">
-                            <img src="images/moonwalk_home.png" alt="">
-                            <img src="images/moonwalk.png" alt="">
-                            <img src="images/moonwalk_boss.png" alt="">
+                            <img src="media/moonwalk_home.png" alt="">
+                            <img src="media/moonwalk.png" alt="">
+                            <img src="media/moonwalk_boss.png" alt="">
                         </div>
                     </div>
                 </a>
-                <a href="project-pages/personal.html">
+                <a href="personal.html">
                     <div class="page">
                         <h3>Personal<em>  -  click to see more</em></h3>
                         <div class="images">
-                            <img src="images/do_not_disturb_thumbnail.png" alt="">
-                            <img src="images/jafo_thumbnail.png" alt="">
-                            <img src="images/public_eye_thumbnail.png" alt="">
+                            <img src="media/do_not_disturb_thumbnail.png" alt="">
+                            <img src="media/jafo_thumbnail.png" alt="">
+                            <img src="media/public_eye_thumbnail.png" alt="">
                         </div>
                     </div>
                 </a>
@@ -92,7 +89,7 @@
 
             <div id="contact">
                 <h3>Contact</h3>
-                <p>Mail: <a href="mailto: dante@chainsawreaction.com">dante@chainsawreaction.com</a> Phone: <a href="tel: +16464304020">(646)-430-4020</a></p>
+                <p>Mail: <a href="mailto:dante@chainsawreaction.com">dante@chainsawreaction.com</a> Phone: <a href="tel:+16464304020">(646)-430-4020</a></p>
             </div>
      
         
@@ -129,6 +126,7 @@
             link.onclick = function() {linkTo("#contact")};
             let link2 = document.querySelector("#highlightLink")
             link2.onclick = function() {linkTo("#highlighted")}
+
         </script>
     </body>
 </html>

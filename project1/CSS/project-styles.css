@@ -43,8 +43,8 @@ body {
 h1 {
     font-size:42pt;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    position:relative;
-    top:-1ex;
+    justify-self: center;
+    width: auto;
 }
 h2 {
     font-size: 23pt;

@@ -9,7 +9,7 @@ body {
     text-align: justify;
 }
 #banner {
-    background-image: url("images/bannerPic.jpg");
+    background-image: url("../media/bannerPic.jpg");
     height:50vh;
     width:65vw;
     margin: 0 auto 1em;
