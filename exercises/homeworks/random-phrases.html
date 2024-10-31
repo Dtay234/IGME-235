@@ -4,20 +4,49 @@
         <meta charset="utf-8">
         <title>Master Oogway Fortune</title>
         <link href="random-phrases-styles.css" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     </head>
     <body>
-        <h1>Master Oogway Fortune Cookies</h1>
-        <div id="paper">
-            <div id="white"></div>
-            <div id="quote"></div>
+        <header>
+            <h1>Master Oogway Fortune Cookies</h1>
+            <button>
+                Get a fortune!
+            </button>
+        </header>
+        
+        <div id="quote" state="front">
+            <p></p>
         </div>
+        <p>click to flip</p>
+        <script>
+            "use strict" 
+            let paper = document.querySelector("#quote");
+            let corner1 = document.createElement("div");
+            corner1.style.gridArea = "tl";
+            paper.appendChild(corner1);
+            let corner2 = document.createElement("div");
+            corner2.style.gridArea = "tr";
+            paper.appendChild(corner2);
+            let corner3 = document.createElement("div");
+            corner3.style.gridArea = "bl";
+            paper.appendChild(corner3);
+            let corner4 = document.createElement("div");
+            corner4.style.gridArea = "br";
+            paper.appendChild(corner4);
+        </script>
+        <h2>
+            by Dante Nguyen-Northcott
+        </h2>
     </body>
     <script>
         "use strict"
         
         let quotes = [
             "Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present.",
-            "An acorn can only become the mighty oak, not a cherry tree. You must let her grow into what she will be.",
+            "An acorn can only become the mighty oak, not a cherry tree.",
             "There is just news. There is no good or bad.",
             "If you only do what you can do, you will never be more than you are now.",
             "There is always something more to learn. Even for a master."
@@ -30,12 +59,33 @@
         }
 
         let currentQuote = "";
+        let luckyNums = [4, 5, 7, 8]
 
         //document.querySelector("button").onclick = function() {
         //    document.querySelector("#quote").innerHTML = newQuote(); 
         //};
+        document.querySelector("#quote").onclick = flip;
 
-        document.querySelector("#quote").innerHTML = newQuote(); 
+        document.querySelector("button").onclick = function() {
+            currentQuote = newQuote();
+            document.querySelector("#quote p").innerHTML = currentQuote;
+            luckyNums = [];
+            for (let i = 0; i < 4; i++) {
+                luckyNums.push((Math.random().toFixed(2) * 100).toFixed(0));
+            }
+            }; 
+
+        function flip() {
+            let paper = document.querySelector("#quote");
+            if (paper.state == "front") {
+                document.querySelector("#quote p").innerHTML = "Your lucky numbers: " + luckyNums[0] + ", " + luckyNums[1] + ", " + luckyNums[2] + ", " + luckyNums[3];
+                paper.state = "back";
+            }
+            else {
+                document.querySelector("#quote p").innerHTML = currentQuote;
+                paper.state = "front";
+            }
+        }
         
     </script>
 </html>
