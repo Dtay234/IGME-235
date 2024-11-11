@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>PixiJS-3</title>
+	<style>
+	button{font-size:1.5em;margin:0.25em;}
+	</style>
+	<script src="https://pixijs.download/release/pixi.min.js"></script>
+</head>
+<body>
+<div>
+	<button id="move">Move</button>
+	<button id="rotate">Rotate</button>
+</div>
+
+<script type="module">
+const app = new PIXI.Application();
+await app.init(
+    {
+	width: 600,
+	height: 400
+    }
+);
+document.body.appendChild(app.view); 
+
+// #1 - make a square
+// https://pixijs.download/release/docs/PIXI.Graphics.html
+const square = new PIXI.Graphics();
+square.beginFill(0xFF0000); // red
+square.lineStyle(3,0xFFFF00,1); // lineWidth,color in hex, alpha
+//square.drawRect(0,0,40,40);
+square.drawRect(-20,-20,40,40);
+square.endFill();
+square.x = 25;
+square.y = 50;
+app.stage.addChild(square);
+
+// #2 make a circle
+let radius = 20;
+const circle = new PIXI.Graphics();
+circle.beginFill(0xFF0000);
+circle.drawCircle(0,0,radius);
+circle.endFill();
+circle.x = 125;
+circle.y = 50;
+app.stage.addChild(circle);
+
+// #3 make a line
+const line = new PIXI.Graphics();
+line.lineStyle(4, 0xFF0000, 1);
+line.moveTo(0, 0);
+line.lineTo(590, 0);
+line.x = 5;
+line.y = 100;
+app.stage.addChild(line);
+
+
+// #4 make a shape
+const poly = new PIXI.Graphics();
+poly.lineStyle(3,0x00FF00,1);
+poly.beginFill(0xFF00FF);
+poly.moveTo(0,0);
+poly.lineTo(-100, 100);
+poly.lineTo(100, 100);
+poly.lineTo(0, 0);
+poly.endFill();
+poly.x = 125;
+poly.y = 125;
+app.stage.addChild(poly);
+
+// #5 target shapes with button DOM events
+document.querySelector("#move").onclick = e=>{square.x+=10;circle.x+=10;line.x+=10;poly.x+=10;};
+document.querySelector("#rotate").onclick = e=>{
+	let amt = Math.PI/6; // 30 degrees
+	square.rotation += amt;
+	line.rotation += amt;
+	poly.rotation += amt;
+	// we can't see the rotation of the circle, so let's scale it up instead
+	circle.width += 5;
+	circle.height += 5;
+};
+
+</script>
+
+</body>
+</html>
