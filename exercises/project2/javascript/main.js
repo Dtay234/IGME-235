@@ -37,6 +37,7 @@ function selectCard(e) {
         stats.data[item.dataset.name].appearances += 1;
         
         item.onclick = undefined;
+        item.ondblclick = undefined;
     }
 
     stats.data[this.dataset.name].picks += 1;
@@ -94,6 +95,11 @@ function saveDataJSON() {
 
 
 //API and selection
+
+
+function highlightCard(e) {
+    this.style.border = "2px solid orange";
+}
 
 function find(value) {
     let dropdown = document.querySelector("#setSelector div");
@@ -171,17 +177,35 @@ function cardDataLoaded(e) {
     let pack = document.querySelector("#pack");
     let card = document.createElement("div");
     card.className = "card";
-    if (obj.image_uris.normal) {
-        card.innerHTML = `<img src="${obj.image_uris.normal} alt="${obj.name}>`;
+    
+    if (obj.card_faces) {
+        card.innerHTML = `<img src="${obj.card_faces[0].image_uris.normal}" alt="${obj.name}">`;
+        card.dataset.side = 0;
+        card.dataset.dfc = true;
+        let flip = document.createElement("button");
+        flip.innerHTML = "Flip";
+        flip.onclick = function(e) {
+            let parent = e.target.parentElement;
+            if (parent.dataset.side == 0) {
+                parent.innerHTML = `<img src="${obj.card_faces[1].image_uris.normal}" alt="${obj.name}">`;
+                parent.dataset.side = 1;
+            }
+            else {
+                parent.innerHTML = `<img src="${obj.card_faces[0].image_uris.normal}" alt="${obj.name}">`;
+                parent.dataset.side = 0;
+            }
+            parent.appendChild(this);
+        }
+        card.appendChild(flip);
     }
-    if (obj.image_uris.small) {
-        card.innerHTML = `<img src="${obj.image_uris.small} alt="${obj.name}>`;
-    }
-    if (obj.image_uris.large) {
-        card.innerHTML = `<img src="${obj.image_uris.large} alt="${obj.name}>`;
+    else {
+        card.innerHTML = `<img src="${obj.image_uris.normal}" alt="${obj.name}">`;
     }
     
-    card.onclick = selectCard;
+    
+    
+    card.onclick = highlightCard;
+    card.ondblclick = selectCard;
     card.dataset.name = obj.name;
     pack.appendChild(card);
     
