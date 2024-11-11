@@ -1,0 +1,89 @@
+body {
+    display:grid;
+    grid-template-columns: 75% auto;
+    grid-template-rows: 10vh 90vh;
+    grid-template-areas: 
+    "controls stats"
+    "pack stats";
+    background-color: rgb(31, 31, 31);
+    overflow: hidden;
+}
+#setSelector {
+    margin-left: 5%;
+}
+#setSelector div {
+    position: absolute;
+    background-color: gray;
+    border: 0px solid black;
+    max-height:20vw;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    cursor: pointer;
+}
+#pack {
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-area: pack;
+    align-items: stretch;
+    overflow-y: scroll;
+}
+#pack::-webkit-scrollbar {
+    display:none;
+}
+#stats {
+   
+    overflow-y: scroll;
+    height:100vh;
+    grid-area: stats;
+    color: white;
+    margin-left: 5%;
+}
+div.card {
+    cursor: pointer;
+    width: 90%;
+    margin: 0.5em auto;
+    position: relative;
+}
+div.card img {
+    border-radius: 9px;
+    width:100%;
+}
+.button {
+    padding: .6% 2%;
+    height: 30%;
+    cursor: pointer;
+    border: 2px solid orange;
+    border-radius: 30px;
+    color: orange;
+    margin: auto 2%;
+    width:10%;
+    text-align: center;
+}
+.button:hover {
+    background-color: rgb(70, 70, 70);
+}
+#controls {
+    grid-area: controls;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+#searchbar {
+    padding: 10px;
+    margin: auto;
+    border-radius: 10px;
+    background-color: rgb(31, 31, 31);
+    border: 2px solid orange;
+    color: orange;
+    font-weight: bolder;
+    
+}
+div.card button {
+    position: absolute;
+    top:0;
+    left: 0;
+    z-index: 1;
+}
+
