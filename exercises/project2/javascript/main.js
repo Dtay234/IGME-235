@@ -17,6 +17,13 @@ function setup() {
     document.querySelector("#newPack").onclick = createPack;
     document.querySelector("body").onclick = () => {
         document.querySelector("#setSelector div").innerHTML = "";
+        for (let item of document.querySelectorAll("div.card")) {
+            if (item.parentNode.querySelector(":hover") == item) {
+                continue;
+            }
+            item.style.borderWidth = "0px";
+            item.dataset.selected = "f";
+        }
     }
 }
 
@@ -29,6 +36,7 @@ stats.data = {};
 function selectCard(e) {
     let array = document.querySelectorAll("div.card");
 
+    let selected;
     for (let item of array) {
         if (!stats.data[item.dataset.name]) {
             stats.data[item.dataset.name] = {appearances:0, picks:0};
@@ -38,9 +46,13 @@ function selectCard(e) {
         
         item.onclick = undefined;
         item.ondblclick = undefined;
-    }
 
-    stats.data[this.dataset.name].picks += 1;
+        if (item.dataset.selected == "t") {
+            selected = item;
+        }
+    }
+    
+    stats.data[selected.dataset.name].picks += 1;
     stats.header[1] += 1;
 
     let statDisplay = document.querySelector("#stats");
@@ -98,7 +110,9 @@ function saveDataJSON() {
 
 
 function highlightCard(e) {
+    
     this.style.border = "2px solid orange";
+    this.dataset.selected = "t";
 }
 
 function find(value) {
