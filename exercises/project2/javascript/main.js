@@ -6,7 +6,7 @@ const MASTERPIECE_REWORK = new Date(2021, 3, 23);
 
 let search = SCRYFALL_URL;
 let currentSet = "";
-
+let currentRank = 1;
 
 window.addEventListener("load", getSetData);
 window.addEventListener("load", setup);
@@ -27,7 +27,7 @@ function setup() {
     }
 }
 
-//Data storage
+//Data
 
 let stats = {}
 
@@ -39,7 +39,7 @@ function selectCard(e) {
     let selected;
     for (let item of array) {
         if (!stats.data[item.dataset.name]) {
-            stats.data[item.dataset.name] = {appearances:0, picks:0};
+            stats.data[item.dataset.name] = {appearances:0, points:0};
         }
 
         stats.data[item.dataset.name].appearances += 1;
@@ -47,34 +47,17 @@ function selectCard(e) {
         item.onclick = undefined;
         item.ondblclick = undefined;
 
-        if (item.dataset.selected == "t") {
-            selected = item;
+        if (item.dataset.rank) {
+            stats.data[item.dataset.name].points += (1 / parseFloat(item.dataset.rank));
+            stats.header[1] += 1;
         }
     }
     
-    stats.data[selected.dataset.name].picks += 1;
-    stats.header[1] += 1;
-
-    let statDisplay = document.querySelector("#stats");
-    statDisplay.innerHTML = "";
-
     
-
-    for (let item in stats.data) {
-        let element = document.createElement("p");
-        let temp1 = parseFloat(`${stats.data[item].picks}`);
-        let temp2 = parseFloat(`${stats.data[item].appearances}`)
-        element.innerHTML = item + " - " + (temp1/temp2 * 100).toFixed(2) + "%";
-        element.dataset.percent = (temp1/temp2 * 100).toFixed(2);
-        statDisplay.appendChild(element);
-    }
-
-    //sort the children by the percentage value
-    [...statDisplay.children].sort(
-        (a, b) => parseFloat(a.dataset.percent) < parseFloat(b.dataset.percent) ? 1 : -1)
-        .forEach(x => statDisplay.append(x));
+    displayData();
     
     
+    currentRank = 1;
 }
 
 function saveDataText() {
@@ -93,7 +76,33 @@ function saveDataJSON() {
 
 }
 
+function displayData() {
+    let statDisplay = document.querySelector("#stats");
+    statDisplay.innerHTML = "";
 
+    
+
+    for (let item in stats.data) {
+        let element = document.createElement("p");
+        let temp1 = parseFloat(`${stats.data[item].points}`);
+        let temp2 = parseFloat(`${stats.data[item].appearances}`)
+        element.innerHTML = item + " - " + (temp1/temp2 * 100).toFixed(2) + "%";
+        element.dataset.percent = (temp1/temp2 * 100).toFixed(2);
+        statDisplay.appendChild(element);
+    }
+
+    //sort the children by the percentage value
+    [...statDisplay.children].sort(
+        (a, b) => parseFloat(a.dataset.percent) < parseFloat(b.dataset.percent) ? 1 : -1)
+        .forEach((x) => {
+            if (x.dataset.percent != 0) 
+                {statDisplay.append(x) }
+            else {
+                statDisplay.removeChild(x);
+            }
+        }
+    );
+}
 
 
 
@@ -113,6 +122,18 @@ function highlightCard(e) {
     
     this.style.border = "2px solid orange";
     this.dataset.selected = "t";
+}
+
+function rankCard(e) {
+    if (currentRank == 4) {
+        return;
+    }
+    this.dataset.rank = currentRank;
+    currentRank++;
+    this.ondblclick = undefined;
+    if (currentRank == 4) {
+        selectCard();
+    }
 }
 
 function find(value) {
@@ -219,7 +240,7 @@ function cardDataLoaded(e) {
     
     
     card.onclick = highlightCard;
-    card.ondblclick = selectCard;
+    card.ondblclick = rankCard;
     card.dataset.name = obj.name;
     pack.appendChild(card);
     
@@ -286,13 +307,13 @@ function createPack() {
                 break;
             }
         }
-        if (bonusSheetCode && date - MASTERPIECE_REWORK < 0 && Math.random() < 1.0/144.0 && bonusSheetCode != "zne") {
+        if (bonusSheetCode && date - MASTERPIECE_REWORK < 0 && Math.random() < 1.0/144.0 && bonusSheetCode != "zne" ) {
             getCardData(search + `q=s:${bonusSheetCode}`);
         }
         else if (bonusSheetCode == "bot" && Math.random() < 0.12) {
             getCardData(search + `q=s:${bonusSheetCode}`);
         }
-        else if (bonusSheetCode && date - MASTERPIECE_REWORK > 0) {
+        else if (bonusSheetCode && date - MASTERPIECE_REWORK > 0 && bonusSheetCode != "rex")  {
             getCardData(search + `q=s:${bonusSheetCode}`);
         }
         else {
