@@ -1,24 +1,33 @@
 body {
     display:grid;
     grid-template-columns: 75% auto;
-    grid-template-rows: 10vh 90vh;
+    grid-template-rows: 10vh 60vh 30vh;
     grid-template-areas: 
     "controls stats"
-    "pack stats";
+    "pack stats"
+    "pack stats-controls";
     background-color: rgb(31, 31, 31);
     overflow: hidden;
 }
 #setSelector {
-    margin-left: 5%;
 }
-#setSelector div {
+#setSelector>div {
     position: absolute;
-    background-color: gray;
+    background-color: rgb(202, 202, 202);
     border: 0px solid black;
     max-height:20vw;
     overflow-y: scroll;
     scroll-behavior: smooth;
     cursor: pointer;
+    z-index: 1;
+    width:20vw;
+    color:rgb(0, 0, 0);
+}
+#setSelector img {
+    height:4vh;
+    width:4vh;
+    margin-right: 5%;
+    margin-left: 5%;
 }
 #pack {
     display:grid;
@@ -34,10 +43,12 @@ body {
 #stats {
    
     overflow-y: scroll;
-    height:100vh;
+    height:100%;
     grid-area: stats;
     color: white;
-    margin-left: 5%;
+    padding-left: 5%;
+    border-left: 3px solid rgb(19, 19, 19);
+    
 }
 div.card {
     cursor: pointer;
@@ -63,11 +74,17 @@ div.card img {
 .button:hover {
     background-color: rgb(70, 70, 70);
 }
+.button:focus {
+    background-color: rgb(70, 70, 70);
+}
+.button:active {
+    background-color: rgb(139, 139, 139);
+}
 #controls {
     grid-area: controls;
     display:flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     
 }
 #searchbar {
@@ -81,9 +98,126 @@ div.card img {
     
 }
 div.card button {
-    position: absolute;
-    top:0;
-    left: 0;
-    z-index: 1;
+    position: absolute; 
+    bottom: -0.5em;
+    left: -0.8em;
+    padding: 1em;
+    font-size: 10pt;
+    font-family: sans-serif;
+    background-color: rgb(32, 46, 126);
+    color:white;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 100px;
+    cursor: pointer;
 }
+small.rank {
+    position: absolute; 
+    top: -0.5em;
+    right: -0.5em;
+    padding: 0.7em;
+    font-size: 12pt;
+    font-family: sans-serif;
+    background-color: rgb(255, 37, 37);
+    color:white;
+    border: 2px solid white;
+    border-radius: 100px;
+    
+}
+div.card button:hover {
+    background-color: rgb(38, 55, 150);
+}
+div.card button:focus {
+    background-color: rgb(38, 55, 150);
+}
+div.card button:active {
+    background-color: rgb(64, 88, 221);
+}
+.button[data-inactive="t"] {
+    border-color: gray;
+    background-color: rgb(46, 46, 46);
+    color: gray;
+    cursor:default;
+}
+#stats-controls {
+    grid-area: stats-controls;
+    width: 100%;
+    margin: 0 auto;
+    border-left: 3px solid rgb(19, 19, 19);
+}
+#stats-controls h2 {
+    text-align: center;
+}
+div.filter {
+    display:flex;
+    height: 4vh;
+    width: 16vw;
+    justify-content: space-around;
+    align-content: center;
+    padding:0.5em;
+    border-radius: 20px;
+    background-color: rgb(66, 66, 66);
+    margin: 0.5em auto;
+}
+div.filter img {
+    cursor: pointer;
+}
+div.filter img[data-toggle="off"] {
+    filter:brightness(50%);
+    
+}
+div.filter div[data-toggle="off"] {
+    filter:brightness(50%);
+    
+}
+div.rarity {
+    height:90%;
+    margin: auto 0;
+    width:3.6vh;
+    border-radius: 10px;
+    border: 2px solid white;
+}
+#mythic {
+    background: linear-gradient(126deg, rgba(210,137,0,1) 35%, rgba(255,255,255,1) 80%, rgba(210,137,0,1) 96%);
+}
+#rare {
+    background: linear-gradient(126deg, rgba(198,189,48,1) 35%, rgba(255,255,255,1) 80%, rgba(198,189,48,1) 96%);
+}
+#uncommon {
+    background: linear-gradient(126deg, rgba(194,194,194,1) 35%, rgba(255,255,255,1) 80%, rgba(194,194,194,1) 96%);
+}
+#common {
+    background-color: black;
+}
+h2 {
+    color:white;
+    margin-left:0;
+    margin-bottom: 0.5em;
+    text-align: center;
+}
+#statsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#statsHeader button {
+    background-color: rgb(129, 196, 29); 
+    height:5vh;
+    padding:1vh;
+    border-radius: 50px;
+    border: 2px solid rgb(0, 0, 0);
+    text-align: center;
+    margin: 0 5%;
+}
+#importForm {
+    position: fixed; 
+    width: 80vw;
+    height: 80vh;
+    top:10vh;
+    left:10vh;
+    text-align: center;
+    background-color: white;
 
+}
+#importForm input {
+    margin: auto auto;
+}

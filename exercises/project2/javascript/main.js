@@ -7,6 +7,7 @@ const MASTERPIECE_REWORK = new Date(2021, 3, 23);
 let search = SCRYFALL_URL;
 let currentSet = "";
 let currentRank = 1;
+let filterConditions = {};
 
 window.addEventListener("load", getSetData);
 window.addEventListener("load", setup);
@@ -15,8 +16,18 @@ let sets;
 
 function setup() {
     document.querySelector("#newPack").onclick = createPack;
+    let searchbar = document.querySelector("#searchbar");
+    searchbar.onkeyup = find;
+    document.querySelector("#JSONCopy").onclick = saveDataJSON;
     document.querySelector("body").onclick = () => {
-        document.querySelector("#setSelector div").innerHTML = "";
+        let selector = document.querySelector("#setSelector div");
+        let hovered = selector.parentNode.querySelector(":hover");
+        if (hovered != selector) {
+            selector.innerHTML = "";
+            selector.style.borderWidth = "0";
+        }
+        
+
         for (let item of document.querySelectorAll("div.card")) {
             if (item.parentNode.querySelector(":hover") == item) {
                 continue;
@@ -24,6 +35,91 @@ function setup() {
             item.style.borderWidth = "0px";
             item.dataset.selected = "f";
         }
+    }
+    let array = document.querySelectorAll("img.color");
+    for (let item of array) {
+        item.dataset.toggle = "off";
+        item.onclick = (e) => {
+
+            if (e.target.dataset.toggle == "off") {
+                e.target.dataset.toggle = "on";
+                if (item.id != "c" && item.id != "m") {
+                    filterConditions[item.id] = (
+                        (x) => {
+                            return x.color.includes(e.target.id) || x.color == e.target.id;
+                        });
+                }
+                else if (item.id == "m") {
+                    filterConditions[item.id] = (
+                        (x) => {
+                            return x.color.length > 1;
+                        });
+                }
+                else {
+                    filterConditions[item.id] = (
+                        (x) => {
+                            return x.color == "";
+                        });
+                }
+                
+            }
+            else {
+                e.target.dataset.toggle = "off";
+                filterConditions[item.id] = undefined;
+            }
+
+            displayData();
+
+        };
+    }
+
+    let array2 = document.querySelectorAll("div.rarity");
+    for (let item of array2) {
+        item.dataset.toggle = "off";
+        item.onclick = (e) => {
+
+            if (e.target.dataset.toggle == "off") {
+                e.target.dataset.toggle = "on";
+                for (let thing of document.querySelectorAll("div.rarity")) {
+                    if (thing != e.target) {
+                        thing.dataset.toggle = "off";
+                        filterConditions[thing.id] = undefined;
+                    }
+                    
+                }
+                filterConditions[item.id] = (
+                    (x) => {
+                        return x.rarity == e.target.id[0];
+                    });
+                
+            }
+            else {
+                e.target.dataset.toggle = "off";
+                filterConditions[item.id] = undefined;
+            }
+
+            displayData();
+
+        };
+    }
+
+    let importButton = document.querySelector("#import");
+    importButton.onclick = function(e) {
+        let form = document.createElement("div");
+        form.id = "importForm";
+        let textField = document.createElement("input");
+        textField.type = "text";
+        form.appendChild(textField);
+        let submit = document.createElement("button");
+        submit.innerHTML = "Load";
+        
+        submit.onclick = (x) => {
+            incoming(x.target.parentNode.querySelector("input").value);
+        }
+
+        form.appendChild(submit);
+
+        document.querySelector("body").appendChild(form);
     }
 }
 
@@ -33,13 +129,15 @@ let stats = {}
 
 stats.data = {};
 
+
+
 function selectCard(e) {
     let array = document.querySelectorAll("div.card");
 
     let selected;
     for (let item of array) {
         if (!stats.data[item.dataset.name]) {
-            stats.data[item.dataset.name] = {appearances:0, points:0};
+            stats.data[item.dataset.name] = {appearances:0, points:0, color:item.dataset.color, rarity:item.dataset.rarity};
         }
 
         stats.data[item.dataset.name].appearances += 1;
@@ -47,15 +145,17 @@ function selectCard(e) {
         item.onclick = undefined;
         item.ondblclick = undefined;
 
-        if (item.dataset.rank) {
-            stats.data[item.dataset.name].points += (1 / parseFloat(item.dataset.rank));
+        if (item.dataset.rank && item.dataset.rank != "none") {
+            stats.data[item.dataset.name].points += (((2.0 - parseFloat(item.dataset.rank)) + 2.0) / 3);
             stats.header[1] += 1;
         }
     }
     
     
     displayData();
-    
+    let b1 = document.querySelector("#reset");
+    b1.onclick = undefined;
+    b1.dataset.inactive = "t";
     
     currentRank = 1;
 }
@@ -73,16 +173,34 @@ function saveDataText() {
 }
 
 function saveDataJSON() {
+    let text = JSON.stringify(stats);
+    navigator.clipboard.writeText(text);
+}
 
+function incoming(str) {
+    stats = JSON.parse(str);
+    displayData();
+    document.querySelector("body").removeChild(document.querySelector("#importForm"));
 }
 
 function displayData() {
-    let statDisplay = document.querySelector("#stats");
+    let statDisplay = document.querySelector("#statsList");
     statDisplay.innerHTML = "";
-
     
 
     for (let item in stats.data) {
+
+        let skip = false;
+        for (let condition in filterConditions) {
+            if (filterConditions[condition] && !(filterConditions[condition](stats.data[item]))) {
+                skip = true;
+                break;
+            }
+        }
+        if (skip) {
+            continue;
+        }
+
         let element = document.createElement("p");
         let temp1 = parseFloat(`${stats.data[item].points}`);
         let temp2 = parseFloat(`${stats.data[item].appearances}`)
@@ -106,17 +224,21 @@ function displayData() {
 
 
 
-
-
-
-
-
-
-
-
-
 //API and selection
 
+function reset() {
+    let array = document.querySelectorAll("div.card");
+
+    for (let item of array) {
+        item.dataset.selected = "f";
+        item.dataset.rank = "none"
+        item.ondblclick = rankCard;
+        let child = item.querySelector("small");
+        if (child) {item.removeChild(child);}
+    }
+
+    currentRank = 1;
+}
 
 function highlightCard(e) {
     
@@ -129,17 +251,24 @@ function rankCard(e) {
         return;
     }
     this.dataset.rank = currentRank;
-    currentRank++;
+    
     this.ondblclick = undefined;
+    let rankMarker = document.createElement("small");
+    rankMarker.className = "rank";
+    rankMarker.innerHTML = "#" + currentRank;
+    this.appendChild(rankMarker);
+    currentRank++;
     if (currentRank == 4) {
         selectCard();
     }
 }
 
-function find(value) {
+function find(e) {
+    let value = e.target.value;
     let dropdown = document.querySelector("#setSelector div");
     dropdown.innerHTML = "";
-    dropdown.style.borderThickness = "2px";
+    
+    
     
 
     for (let i = 0; i < sets.length; i++) {
@@ -149,17 +278,32 @@ function find(value) {
                 && set.set_type != "draft_innovation" 
                 && set.set_type != "core") 
             || set.parent_set_code != null 
+            || set.digital
             || (!set.name.toLowerCase().includes(value.toLowerCase())) 
                 && !set.code.includes(value.toLowerCase())) 
                 || set.card_count < 200){
             continue;
         }
 
-        let element = document.createElement("p");
-        element.innerHTML = set.name + ` (${set.code.toUpperCase()})`;
+        let element = document.createElement("div");
+        element.style.display = "flex";
+        element.style.alignItems = "center";
+        let text = document.createElement("p");
+        text.innerHTML = set.name + ` (${set.code.toUpperCase()})`;
         element.dataset.code = set.code;
-        dropdown.appendChild(element);
+        
         element.onclick = select;
+        let img = document.createElement("img");
+        img.src = set.icon_svg_uri;
+        img.alt = "";
+        
+        element.appendChild(img);
+        element.appendChild(text);
+        dropdown.appendChild(element);
+    }
+
+    if (dropdown.children.length > 0) {
+        dropdown.style.borderThickness = "2px";
     }
 }
 
@@ -184,7 +328,7 @@ function setDataLoaded(e) {
     let xhr = e.target;
 
     let obj = JSON.parse(xhr.responseText);
-    sets=obj.data;
+    sets = obj.data;
 }
 
 
@@ -212,6 +356,12 @@ function cardDataLoaded(e) {
     let pack = document.querySelector("#pack");
     let card = document.createElement("div");
     card.className = "card";
+    let strColor = "";
+    for (let c in obj.colors) {
+        strColor += obj.colors[c].toLowerCase();
+    }
+    card.dataset.color = strColor;
+    card.dataset.rarity = obj.rarity[0];
     
     if (obj.card_faces) {
         card.innerHTML = `<img src="${obj.card_faces[0].image_uris.normal}" alt="${obj.name}">`;
@@ -221,6 +371,7 @@ function cardDataLoaded(e) {
         flip.innerHTML = "Flip";
         flip.onclick = function(e) {
             let parent = e.target.parentElement;
+            let rank = parent.querySelector("small");
             if (parent.dataset.side == 0) {
                 parent.innerHTML = `<img src="${obj.card_faces[1].image_uris.normal}" alt="${obj.name}">`;
                 parent.dataset.side = 1;
@@ -230,6 +381,7 @@ function cardDataLoaded(e) {
                 parent.dataset.side = 0;
             }
             parent.appendChild(this);
+            parent.appendChild(rank);
         }
         card.appendChild(flip);
     }
@@ -323,7 +475,9 @@ function createPack() {
     }
 
     
-      
+    let b1 = document.querySelector("#reset");
+    b1.onclick = reset;
+    b1.dataset.inactive = "f";
     
     
 }

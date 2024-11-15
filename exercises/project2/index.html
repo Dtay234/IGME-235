@@ -9,7 +9,7 @@
     <body> 
         <div id="controls">
             <div id="setSelector">
-                <input type="text" placeholder="Search.." id="searchbar" onkeyup="find(this.value)" autocomplete="off">
+                <input type="text" placeholder="Search.." id="searchbar" autocomplete="off">
                 <div>
                     
                 </div>
@@ -17,13 +17,43 @@
             </div>
     
             <div id="newPack" class="button">New Pack</div>
+            <div id="reset" class="button">Reset</div>
             <div id="import" class="button">Import</div>
-            <div id="export" class="button">Export</div>
         </div>
         
 
         <div id="stats">
-           
+            <h2>Stats</h2>
+           <div id="statsHeader">
+                
+                <!--<button id="textCopy">Copy Text</button> -->
+                <button id="JSONCopy">Copy JSON</button>
+           </div>
+           <div id="statsList">
+
+           </div>
+        </div>
+
+        <div id="stats-controls">
+            <h2>Filters</h2>
+            <div id="colorPicker" class="filter">
+                <img class="color" id="w" src="images/W.png" alt="">
+                <img class="color" id="u" src="images/U.png" alt="">
+                <img class="color" id="b" src="images/B.png" alt="">
+                <img class="color" id="r" src="images/R.png" alt="">
+                <img class="color" id="g" src="images/G.png" alt="">
+                <img class="color" id="c" src="images/C.png" alt="">
+                <img class="color" id="m" src="images/M.png" alt="">
+            </div>
+            <div id="rarityPicker" class="filter">
+                <div id="mythic" class="rarity"></div>
+                <div id="rare" class="rarity"></div>
+                <div id="uncommon" class="rarity"></div>
+                <div id="common" class="rarity"></div>
+            </div>
+            
+
+
         </div>
         
         <div id="pack">
