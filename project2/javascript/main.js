@@ -18,6 +18,13 @@ function setup() {
     document.querySelector("#newPack").onclick = createPack;
     let searchbar = document.querySelector("#searchbar");
     searchbar.onkeyup = find;
+    let storedSet = localStorage.getItem("dn5600storedSet");
+    if (storedSet) {
+        searchbar.value = storedSet.toUpperCase();
+        currentSet = storedSet;
+        stats.header = [currentSet, 0];
+        stats.data = {}
+    }
     document.querySelector("#JSONCopy").onclick = saveDataJSON;
     document.querySelector("body").onclick = () => {
         let selector = document.querySelector("#setSelector div");
@@ -73,6 +80,8 @@ function setup() {
         };
     }
 
+    
+
     let array2 = document.querySelectorAll("div.rarity");
     for (let item of array2) {
         item.dataset.toggle = "off";
@@ -118,9 +127,56 @@ function setup() {
         }
 
         form.appendChild(submit);
+        form.appendChild(createXButton());
 
         document.querySelector("body").appendChild(form);
     }
+
+    let infoButton = document.querySelector("header img");
+    infoButton.onclick = (e) => {
+        addInstructions(55.3, 30, "Paste in a previously exported dataset to load");
+        addInstructions(4, 30, "Search for a set to draft");
+        addInstructions(22.85, 30, "Generate a new pack");
+        addInstructions(41.4, 30, "Clear card selections");
+        //addInstructions(81, 15, "Export data as a JSON");
+        //addInstructions(79, 85, "Filter card stats by color and rarity")
+        addInstructions(22.85, 2, "When a pack is generated, double click to pick a card. You can pick up to three. For the second and third picks, pick what you would if previous picks were already taken from the pack.")
+    }
+}
+
+function addInstructions(x, y, text) {
+    let info = document.createElement("div");
+    info.innerHTML = text;
+    info.style.position = "absolute";
+    info.style.backgroundColor = "rgb(201, 201, 201)";
+    info.style.textAlign = "center";
+    info.style.borderRadius = "10px";
+    info.style.color = "black";
+    info.style.fontSize = "10pt";
+    info.style.padding = "20px";
+    info.style.left = `${x}vw`;
+    info.style.top = `${y}vh`;
+    info.style.maxWidth = "40vw";
+    document.querySelector("body").appendChild(info);
+    
+    info.appendChild(createXButton());
+}
+
+function createXButton() {
+    let xButton = document.createElement("span");
+    xButton.innerHTML = "x";
+    xButton.style.position = "absolute";
+    xButton.style.top = "2px";
+    xButton.style.right = "5px";
+    xButton.style.fontFamily = "sans-serif";
+    xButton.style.color = "black";
+    xButton.style.cursor = "pointer";
+    xButton.style.padding = "5px";
+    xButton.onclick = (e) => {
+        e.target.parentElement.parentElement.removeChild(e.target.parentElement);
+    }
+
+    return xButton;
 }
 
 //Data
@@ -319,7 +375,9 @@ function select(e) {
     dropdown.innerHTML = "";
     dropdown.style.borderThickness = "0";
     stats.header = [currentSet, 0];
-
+    stats.data = {};
+    displayData();
+    localStorage.setItem("dn5600storedSet", currentSet);
     createPack(currentSet);
 }
 
@@ -363,7 +421,7 @@ function cardDataLoaded(e) {
     card.dataset.color = strColor;
     card.dataset.rarity = obj.rarity[0];
     
-    if (obj.card_faces) {
+    if (obj.card_faces && !obj.type_line.includes("Room")) {
         card.innerHTML = `<img src="${obj.card_faces[0].image_uris.normal}" alt="${obj.name}">`;
         card.dataset.side = 0;
         card.dataset.dfc = true;
