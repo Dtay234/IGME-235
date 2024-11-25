@@ -4,7 +4,9 @@ html {
     margin:0;
     overflow-x: hidden;
 }
-
+p {
+    font-size: 14pt;
+}
 nav {
     display: flex;
     width:100vw;
@@ -98,11 +100,14 @@ a.card img {
     flex-wrap: wrap;
     margin-top:10px;
 }
-@media screen and (max-width:1200px) {
+@media screen and (max-width:1500px) {
     nav {
         flex-wrap: wrap;
         height:auto;
         padding: 10px;
+    }
+    a.card img {
+        height:40%;
     }
 }
 

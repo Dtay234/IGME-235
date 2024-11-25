@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 const SCRYFALL_URL = "https://api.scryfall.com/cards/random?";
 const PLAY_BOOSTER_RELEASE = new Date(2024, 1, 9);
@@ -14,8 +14,18 @@ window.addEventListener("load", setup);
 
 let sets;
 
+//delay pressing of new pack button for 1 sec
+function newPack(e) {
+    e.target.onclick = undefined;
+        createPack();
+        setTimeout(() => {
+            e.target.onclick = newPack;
+        }, 1000);
+}
+
+//perform all needed functions when window is loaded
 function setup() {
-    document.querySelector("#newPack").onclick = createPack;
+    document.querySelector("#newPack").onclick = newPack;
     let searchbar = document.querySelector("#searchbar");
     searchbar.onkeyup = find;
     let storedSet = localStorage.getItem("dn5600storedSet");
@@ -23,7 +33,7 @@ function setup() {
         searchbar.value = storedSet.toUpperCase();
         currentSet = storedSet;
         stats.header = [currentSet, 0];
-        stats.data = {}
+        stats.data = {};
     }
     document.querySelector("#JSONCopy").onclick = saveDataJSON;
     document.querySelector("body").onclick = () => {
@@ -33,7 +43,6 @@ function setup() {
             selector.innerHTML = "";
             selector.style.borderWidth = "0";
         }
-        
 
         for (let item of document.querySelectorAll("div.card")) {
             if (item.parentNode.querySelector(":hover") == item) {
@@ -42,7 +51,7 @@ function setup() {
             item.style.borderWidth = "0px";
             item.dataset.selected = "f";
         }
-    }
+    };
     let array = document.querySelectorAll("img.color");
     for (let item of array) {
         item.dataset.toggle = "off";
@@ -124,13 +133,13 @@ function setup() {
         
         submit.onclick = (x) => {
             incoming(x.target.parentNode.querySelector("input").value);
-        }
+        };
 
         form.appendChild(submit);
         form.appendChild(createXButton());
 
         document.querySelector("body").appendChild(form);
-    }
+    };
 
     let infoButton = document.querySelector("header img");
     infoButton.onclick = (e) => {
@@ -139,11 +148,12 @@ function setup() {
         addInstructions(22.85, 30, "Generate a new pack");
         addInstructions(41.4, 30, "Clear card selections");
         //addInstructions(81, 15, "Export data as a JSON");
-        //addInstructions(79, 85, "Filter card stats by color and rarity")
-        addInstructions(22.85, 2, "When a pack is generated, double click to pick a card. You can pick up to three. For the second and third picks, pick what you would if previous picks were already taken from the pack.")
-    }
+        //addInstructions(79, 85, "Filter card stats by color and rarity");
+        addInstructions(22.85, 2, "When a pack is generated, double click to pick a card. You can pick up to three. For the second and third picks, pick what you would if previous picks were already taken from the pack.");
+    };
 }
 
+//create an instruction bubble 
 function addInstructions(x, y, text) {
     let info = document.createElement("div");
     info.innerHTML = text;
@@ -162,6 +172,7 @@ function addInstructions(x, y, text) {
     info.appendChild(createXButton());
 }
 
+//creates a button that will delete the parent element when clicked
 function createXButton() {
     let xButton = document.createElement("span");
     xButton.innerHTML = "x";
@@ -174,7 +185,7 @@ function createXButton() {
     xButton.style.padding = "5px";
     xButton.onclick = (e) => {
         e.target.parentElement.parentElement.removeChild(e.target.parentElement);
-    }
+    };
 
     return xButton;
 }
@@ -186,7 +197,7 @@ let stats = {}
 stats.data = {};
 
 
-
+//called once all 3 cards have been picked. Stores their data in stats
 function selectCard(e) {
     let array = document.querySelectorAll("div.card");
 
@@ -205,6 +216,32 @@ function selectCard(e) {
             stats.data[item.dataset.name].points += (((2.0 - parseFloat(item.dataset.rank)) + 2.0) / 3);
             stats.header[1] += 1;
         }
+
+        let element = document.createElement("p");
+        let temp1 = parseFloat(`${stats.data[item.dataset.name].points}`);
+        let temp2 = parseFloat(`${stats.data[item.dataset.name].appearances}`)
+        let pts = (temp1/temp2 * 100).toFixed(0);
+        element.innerHTML =  pts + " pts";
+        item.appendChild(element);
+        if (pts < 10) {
+            element.style.backgroundColor = "red";
+            element.style.color = "white";
+        }
+        else if (pts < 20) {
+            element.style.backgroundColor = "orange"
+            element.style.color = "white";
+        }
+        else if (pts < 40) {
+            element.style.backgroundColor = "yellow"
+        }
+        else if (pts < 70) {
+            element.style.backgroundColor = "blue"
+            element.style.color = "white";
+        }
+        else {
+            element.style.backgroundColor = "green"
+            element.style.color = "white";
+        }
     }
     
     
@@ -216,6 +253,7 @@ function selectCard(e) {
     currentRank = 1;
 }
 
+//copy the data as text (not json) -- not yet implemented
 function saveDataText() {
     let text = document.createElement("div");
     let header = document.createElement("p");
@@ -228,17 +266,24 @@ function saveDataText() {
     }
 }
 
+//copy stats as a JSON
 function saveDataJSON() {
     let text = JSON.stringify(stats);
     navigator.clipboard.writeText(text);
 }
 
+//import JSON data into the stats field
 function incoming(str) {
     stats = JSON.parse(str);
+    document.querySelector("#pack").innerHTML = "";
+    reset();
+    currentSet = stats.header[0];
+    document.querySelector("#searchbar").value = currentSet.toUpperCase();
     displayData();
     document.querySelector("body").removeChild(document.querySelector("#importForm"));
 }
 
+//display list of cards and data on the right
 function displayData() {
     let statDisplay = document.querySelector("#statsList");
     statDisplay.innerHTML = "";
@@ -260,7 +305,7 @@ function displayData() {
         let element = document.createElement("p");
         let temp1 = parseFloat(`${stats.data[item].points}`);
         let temp2 = parseFloat(`${stats.data[item].appearances}`)
-        element.innerHTML = item + " - " + (temp1/temp2 * 100).toFixed(2) + "%";
+        element.innerHTML = item + " - " + (temp1/temp2 * 100).toFixed(0) + " pts";
         element.dataset.percent = (temp1/temp2 * 100).toFixed(2);
         statDisplay.appendChild(element);
     }
@@ -270,7 +315,7 @@ function displayData() {
         (a, b) => parseFloat(a.dataset.percent) < parseFloat(b.dataset.percent) ? 1 : -1)
         .forEach((x) => {
             if (x.dataset.percent != 0) 
-                {statDisplay.append(x) }
+                {statDisplay.append(x); }
             else {
                 statDisplay.removeChild(x);
             }
@@ -282,6 +327,7 @@ function displayData() {
 
 //API and selection
 
+//unrank and deselect all cards
 function reset() {
     let array = document.querySelectorAll("div.card");
 
@@ -296,12 +342,14 @@ function reset() {
     currentRank = 1;
 }
 
+//create an outline over the clicked card
 function highlightCard(e) {
     
     this.style.border = "2px solid orange";
     this.dataset.selected = "t";
 }
 
+//called when a card is double clicked. Picks the card and ranks it 1-3. after the 3rd, store the data
 function rankCard(e) {
     if (currentRank == 4) {
         return;
@@ -319,6 +367,8 @@ function rankCard(e) {
     }
 }
 
+//Called whenever the user types in the search bar. Filters the list of sets by if they 
+//meet the conditions of a draftable set and if they contain the search term
 function find(e) {
     let value = e.target.value;
     let dropdown = document.querySelector("#setSelector div");
@@ -329,6 +379,8 @@ function find(e) {
 
     for (let i = 0; i < sets.length; i++) {
         let set = sets[i];
+        let dateData = set.released_at.split("-");
+        let date = new Date(parseInt(dateData[0]), parseInt(dateData[1]), parseInt(dateData[2]));
         if (((set.set_type != "expansion" 
                 && set.set_type != "masters" 
                 && set.set_type != "draft_innovation" 
@@ -337,9 +389,14 @@ function find(e) {
             || set.digital
             || (!set.name.toLowerCase().includes(value.toLowerCase())) 
                 && !set.code.includes(value.toLowerCase())) 
-                || set.card_count < 200){
+                || set.code == "acr"
+            || set.code == "mat"
+        || new Date() - date < 0){
+                    
             continue;
         }
+
+        
 
         let element = document.createElement("div");
         element.style.display = "flex";
@@ -364,11 +421,13 @@ function find(e) {
 }
 
 
-
+//Called when an item from the set selector is clicked. Sets the current set to the selected one,
+//clears the dropdown, stores new data locally, resets the stats object, and generates a pack from 
+//the selected set.
 function select(e) {
     document.querySelector("#pack").innerHTML = "";
     currentSet = e.target.innerHTML.toLowerCase().match(/\((.*)\)/)[0];
-    currentSet = currentSet.replace('(', '').replace(')', '');
+    currentSet = currentSet.replace("(", "").replace(")", "");
     let searchbar = document.querySelector("#setSelector input");
     searchbar.value = currentSet.toUpperCase();
     let dropdown = document.querySelector("#setSelector div");
@@ -381,7 +440,7 @@ function select(e) {
     createPack(currentSet);
 }
 
-
+//parse the list of sets and put the data in 'sets'
 function setDataLoaded(e) {
     let xhr = e.target;
 
@@ -389,7 +448,7 @@ function setDataLoaded(e) {
     sets = obj.data;
 }
 
-
+//ask for card data from API
 function getCardData(url) {
     let xhr = new XMLHttpRequest();
     xhr.onload = cardDataLoaded;
@@ -398,6 +457,7 @@ function getCardData(url) {
     xhr.send();
 }
 
+//ask for set data from API
 function getSetData() {
     let xhr = new XMLHttpRequest();
     xhr.onload = setDataLoaded;
@@ -406,6 +466,7 @@ function getSetData() {
     xhr.send();
 }
 
+//parse card data and create element to display it and store related data
 function cardDataLoaded(e) {
     let xhr = e.target;
 
@@ -421,6 +482,7 @@ function cardDataLoaded(e) {
     card.dataset.color = strColor;
     card.dataset.rarity = obj.rarity[0];
     
+    //check if double-faced card
     if (obj.card_faces && !obj.type_line.includes("Room")) {
         card.innerHTML = `<img src="${obj.card_faces[0].image_uris.normal}" alt="${obj.name}">`;
         card.dataset.side = 0;
@@ -440,7 +502,7 @@ function cardDataLoaded(e) {
             }
             parent.appendChild(this);
             parent.appendChild(rank);
-        }
+        };
         card.appendChild(flip);
     }
     else {
@@ -460,6 +522,7 @@ function dataError(e) {
     console.log("An error occurred");
 }
 
+//generates cards for a pack with contents based on several factors, including the set's release date and child sets 
 function createPack() {
     
     let terms = `q=s:${currentSet}`;
@@ -472,7 +535,7 @@ function createPack() {
             break;
         }
     }
-    let dateData = setData.released_at.split('-');
+    let dateData = setData.released_at.split("-");
     let date = new Date(parseInt(dateData[0]), parseInt(dateData[1]), parseInt(dateData[2]));
     if (date - PLAY_BOOSTER_RELEASE > 0) {
         getCardData(search + terms + "+-type:basic");
@@ -537,9 +600,18 @@ function createPack() {
     b1.onclick = reset;
     b1.dataset.inactive = "f";
     
-    
+    setTimeout(() => {
+        let toSort = document.querySelector("#pack");
+        let array = [...toSort.children].sort(
+        (a, b) => (
+                a.dataset.rarity == "m" 
+                || (a.dataset.rarity == "r" && b.dataset.rarity != "m") 
+                || (a.dataset.rarity == "u" && b.dataset.rarity == "c")) 
+                ? -1 : 1).forEach((x) => toSort.append(x))
+    }, 1000);
 }
 
+//gets a card for the slot which has a card from The List for that set
 function getListCard(setCode, releaseDate) {
     let rand = Math.random();
     if (rand < 7.0/8.0) {
