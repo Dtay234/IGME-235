@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About</title>
+    <style>
+        body {
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>About the page:</h1>
+    <p>Created by Dante Nguyen-Northcott</p>
+    <p>This page is mostly meant to work best with more recent sets. Older ones are not guaranteed to have accurate pack contents.</p>
+    <p>I started out with what we did on the giphy homework. Getting the API to work took some time as there are certain quirks about the url that needs to be sent to scryfall. Fortunately, 
+        scryfall allows the query to be in the same format as its searches on the website (ex: q=set:afr means from the set AFR) which made things pretty simple once I figured it out. 
+    </p>
+    <p>Process:</p>
+    <ol>
+        <li>Get random cards and display them on the page</li>
+        <li>Determine pack contents</li>
+        <li>Let user choose set</li>
+        <li>Let user pick cards</li>
+        <li>Store and display stats on the right</li>
+        <li>Filter data</li>
+        <li>Import & export data</li>
+        <li>Local storage</li>
+    </ol>
+    <p>
+        I had to make the contents of the 'pack' 
+        similar to what real packs look like, otherwise the site would be pointless. This was harder than it sounds, and took a lot of research. WOTC changes what's in 
+        a pack more often than I would like. Recent sets have bonus sheets that have a chance to appear in certain slots as well as bonus sheets that have a card in 
+        every pack, and some have cards with wildly low chances of appearing (Amonkhet's invocations, for example) and I wanted to be as faithful as I could so it took me a 
+        decent amount of time to put in all the rules for what cards can appear. However, I ended up not doing specifics for sets with special pack contents, like War of the Spark
+        and Commander Legends.
+        Something else that was hard to implement was the filtering of the cards on the right based on color and rarity. The way I did it was I have an object which holds 
+        functions that return true or false based on the dataset of the element passed in. 
+        Another was that double-faced cards have a different way of storing data in the API, so they required a different implementation for putting their data on screen
+    </p>
+
+    <p>Sources:</p>
+    <ul>
+        <li>Color symbols: <a href="https://mtg.fandom.com/wiki/Main_Page">https://mtg.fandom.com</a></li>
+        <li>API: <a href="https://scryfall.com/docs/api">scryfall.com/docs/api</a></li>
+    </ul>
+    <p>
+        Tutorials used: 
+    </p>
+    <ul>
+        <li>Spread syntax: used to sort the generated card by rarity and the stats on the right from highest to lowest points</li>
+        <li>Regex: used to get the set code from inside the parentheses when selecting an item from the search bar</li>
+        <li>webkit-scrollbar: used to hide the scrollbar in the pack area. In the future I would want to use this to make the other scrollbars look better</li>
+        <li>How to copy text to clipboard</li>
+    </ul>
+</body>
+</html>

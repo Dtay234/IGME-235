@@ -13,7 +13,7 @@ body {
 }
 header {
     display: grid;
-    grid-template-columns: 25% 75%;
+    grid-template-columns: auto 1fr;
     grid-template-rows: 50% 50%;
     grid-template-areas: 
     "title info"
@@ -38,10 +38,12 @@ h5 {
 header img {
     height: 60%;
     cursor:pointer;
-    margin: auto 0;
+    margin: auto 0 auto 5%;
     
 }
 #setSelector {
+    width:17%;
+    position: relative;
 }
 #setSelector>div {
     position: absolute;
@@ -52,7 +54,7 @@ header img {
     scroll-behavior: smooth;
     cursor: pointer;
     z-index: 1;
-    width:20vw;
+    width:300px;
     color:rgb(0, 0, 0);
 }
 #setSelector img {
@@ -68,6 +70,11 @@ header img {
     grid-area: pack;
     align-items: stretch;
     width:100%;
+}
+@media screen and (max-width:1100px) {
+    #pack {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
 }
 #pack::-webkit-scrollbar {
     display:none;
@@ -125,6 +132,7 @@ div.card img {
     padding: 10px;
     margin: auto;
     border-radius: 10px;
+    width:100%;
     background-color: rgb(31, 31, 31);
     border: 2px solid orange;
     color: orange;
@@ -188,8 +196,7 @@ div.card button:active {
 div.filter {
     display:flex;
     height: 4vh;
-    width: 16vw;
-    justify-content: space-around;
+    width:fit-content;
     align-content: center;
     padding:0.5em;
     border-radius: 20px;
@@ -198,6 +205,8 @@ div.filter {
 }
 div.filter img {
     cursor: pointer;
+    height: 100%;
+    margin: auto 3px;
 }
 div.filter img[data-toggle="off"] {
     filter:brightness(50%);
@@ -209,7 +218,7 @@ div.filter div[data-toggle="off"] {
 }
 div.rarity {
     height:90%;
-    margin: auto 0;
+    margin: auto 10px;
     width:3.6vh;
     border-radius: 10px;
     border: 2px solid white;
@@ -287,4 +296,29 @@ h2 {
 }
 #importForm button:active {
     background-color: rgb(255, 255, 255);
+}
+div.card p {
+    position: absolute;
+    top: 40%;
+    left:30%;
+    text-align: center;
+    color:black;
+    border: 2px solid white;
+    padding-top: 0.5em;
+    width: 40%;
+    height: 10%;
+    border-radius: 20px;
+}
+a {
+    color:orange;
+    margin-left: 45%;
+    width:10%;
+    text-align: center;
+}
+
+a:visited {
+    color:gray;
+}
+a:active {
+    color:white;
 }
