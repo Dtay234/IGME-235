@@ -20,14 +20,14 @@ class Ball extends PIXI.Graphics {
 class Shape {
     constructor() {
         this.points = [];
-        
+
     }
 
     score(path) {
         let total = 0;
         let gained = 0;
         for (let point of path) {
-            for ()
+            for ()  //https://math.stackexchange.com/questions/4079605/how-to-find-closest-point-to-polygon-shape-from-any-coordinate
         }
     }
 }
