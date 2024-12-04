@@ -3,7 +3,7 @@
 "use strict";
 const app = new PIXI.Application();
 
-let sceneWidth, sceneHeight;
+let sceneWidth, sceneHeight, offset;
 
 // aliases
 let stage;
@@ -11,15 +11,20 @@ let assets;
 
 // game variables
 let startScene;
-let gameScene, ball, scoreLabel, gameOverScoreLabel;
+let gameScene, ball, board, side, topBottom, scoreLabel, gameOverScoreLabel, mouseLock, tilting;
 let gameOverScene;
 
 let score = 0;
-let life = 100;
-let levelNum = 1;
 let paused = true;
 
 let keysDown = [];
+let objects = [];
+
+let scaleFactorX = 1;
+let scaleFactorY = 1;
+
+let shape = [];
+
 
 // Load all assets
 loadImages();
@@ -50,6 +55,7 @@ async function setup( ) {
     stage = app.stage;
     sceneWidth = app.renderer.width;
     sceneHeight = app.renderer.height;
+    offset = {x:sceneWidth/2, y:sceneHeight/2};
     
     // #1 - Create the start scene
     startScene = new PIXI. Container( );
@@ -68,13 +74,50 @@ async function setup( ) {
     // #4 - Create labels for all 3 scenes
     createLabelsAndButtons();
 
-    // #5 - Create ship
-    ball = new Ball();
-    gameScene.addChild(ball);
+    board = new PIXI.Graphics();
+    board.beginFill(0xffffff);
+	board.drawRect(-offset.x, -offset.y, offset.x * 2, offset.y * 2);
+    //rect.lineStyle(4, 0xFFFF00, 1);
+	board.endFill();
+    board.x = 0;
+    board.y = 0;
+    gameScene.addChild(board);
+    objects.push(board);
 
+    side = new PIXI.Graphics();
+    side.beginFill(0x808080);
+        side.drawRect(0,
+            0,
+            1, 
+            1);
+
+    side.endFill();
+    gameScene.addChild(side);
+
+    topBottom = new PIXI.Graphics();
+    topBottom.beginFill(0x808080);
+    topBottom.drawRect(0,
+            0,
+            1, 
+            1);
+
+            topBottom.endFill();
+    gameScene.addChild(topBottom);
+
+    generateShape();
+
+
+    ball = new Ball(10, 0xff0000, shape[0].x, shape[0].y);
+    gameScene.addChild(ball);
+    objects.push(ball);
+    
+    
+    
     
     window.addEventListener("keydown", keyDownHandler);
     window.addEventListener("keyup", keyUpHandler);
+    window.onmousedown = onclickhandler;
+    window.onmouseup = onunclickhandler;
 
     // #8 - Start update loop
     app.ticker.add(gameLoop);
@@ -93,6 +136,17 @@ function keyUpHandler(e) {
     keysDown = keysDown.filter((x) => x != e.key);
 }
 
+function onclickhandler(e) {
+    mouseLock = {x:app.renderer.events.pointer.global.x, y:app.renderer.events.pointer.global.y};
+    tilting = true;
+}
+
+function onunclickhandler(e) {
+    tilting = false;
+    ball.tilt.x = 0;
+    ball.tilt.y = 0;
+}
+
 function createLabelsAndButtons() {
     let buttonStyle = {
     fill: 0xff0000,
@@ -100,7 +154,7 @@ function createLabelsAndButtons() {
     fontFamily: "Futura",
     };
     
-    let startLabel1 = new PIXI.Text("Circle Blast!", {
+    let startLabel1 = new PIXI.Text("Gravity Art", {
     fill: 0xffffff,
     fontSize: 96,
     fontFamily: "Futura",
@@ -218,95 +272,74 @@ function gameLoop(){
     // #1 - Calculate "delta time"
     let dt = 1 / app.ticker.FPS;
     if (dt > 1 / 12) dt = 1 / 12;
+
+    unmap();
   
-  
-    // #2 - Move Ship
+/*
+    if (keysDown.includes('d')) {
+        ball.tilt.x += 0.6;
+        if (ball.tilt.x > 3)
+        {
+            ball.tilt.x = 3;
+        }
+    }
+    else if (keysDown.includes('a')) {
+        ball.tilt.x -= 0.6;
+        if (ball.tilt.x < -3)
+            {
+                ball.tilt.x = -3;
+            }
+    }
+    else { 
+        ball.tilt.x = 0;
+    }
+    if (keysDown.includes('w')) {
+        ball.tilt.y -= 0.3;
+        if (ball.tilt.y < -3)
+            {
+                ball.tilt.y = -3;
+            }
+    }
+    else if (keysDown.includes('s')) {
+        ball.tilt.y += 0.3;
+        if (ball.tilt.y > 3)
+            {
+                ball.tilt.y = 3;
+            }
+    }
+    else {
+        ball.tilt.y = 0;
+    }
+        */
+
     let mousePosition = app.renderer.events.pointer.global;
 
-    let amt = 6 * dt; 
-    let newX = lerp(ship.x, mousePosition.x, amt);
-    let newY = lerp(ship.y, mousePosition.y, amt);
+    if (tilting) {
+        ball.tilt.x = (mousePosition.x - mouseLock.x) / 60;
+        ball.tilt.y = (mousePosition.y - mouseLock.y) / 60;
 
-    let w2 = ship.width / 2;
-    let h2 = ship.height / 2;
-    ship.x = clamp(newX, 0 + w2, sceneWidth - w2);
-    ship.y = clamp(newY, 0 + h2, sceneHeight - h2);
+        
+    }
+    if (Math.abs(ball.tilt.x) > 1) {
+        ball.tilt.x = 1 * Math.sign(ball.tilt.x);
+    }
+    if (Math.abs(ball.tilt.y) > 1) {
+        ball.tilt.y = 1 * Math.sign(ball.tilt.y);
+    }
 
-
+    ball.velocity.x += ball.tilt.x * 3;
+    ball.velocity.y += ball.tilt.y * 3;
+    ball.x += ball.velocity.x * dt;
+    ball.y += ball.velocity.y * dt;
     
-
-    // #3 - Move Circles
-    for (let c of circles) {
-        c.move(dt);
-        if (c.x <= c.radius|| c.x >= sceneWidth - c.radius) {
-            c.reflectX();
-            c.move(dt);
-            }
-        if (c.y <= c.radius || c.y >= sceneHeight - c.radius) {
-            c.reflectY();
-            c.move(dt);
-        }
-    }
-    
-    // #4 - Move Bullets
-    for (let b of bullets) {
-        b.move(dt);
-    }
-  
-    // #5 - Check for Collisions
-    for (let c of circles) {
-    
-        for (let b of bullets) {
-            if (rectsIntersect(c, b)) {
-                fireballSound.play();
-                createExplosion(c.x, c.y, 64, 64);
-                gameScene.removeChild(c);
-                c.isAlive = false;
-                gameScene.removeChild(b);
-                b.isAlive = false;
-                increaseScoreBy(1);
-                break;
-            }
-        }
-        if (c.isAlive && rectsIntersect(c, ship)) {
-            hitSound.play();
-            gameScene.removeChild(c);
-            c.isAlive = false;
-            decreaseLifeBy(20);
-        }
-    }
-  
-  
-    // #6 - Now do some clean up
-    bullets = bullets.filter((b) => b.isAlive);
-    circles = circles.filter((c) => c.isAlive);
-    explosions = explosions.filter((e) => e.playing);
-  
-    // #7 - Is game over?
-    if (life <= 0){
-        end();
-        return; // return here so we skip #8 below
-    }
-  
-    // #8 - Load next level
-    if (circles.length == 0) {
-        levelNum++;
-        loadLevel();
-    }
-}
-
-function createCircles(numCircles = 10) {
-    for (let i = 0; i < numCircles; i++) {
-    let c = new Circle(10, 0xffff00);
-    c.x = Math.random() * (sceneWidth - 50) + 25;
-    c.y = Math.random() * (sceneHeight - 400) + 25;
-    circles.push(c);
-    gameScene.addChild(c);
-    }
+    drawPath();
+    map();
 }
 
 function loadLevel(){
     
+
+    map();
 }
 
 function end() {
@@ -339,3 +372,121 @@ function loadSpriteSheet() {
 }
     */
 
+function map() {
+    scaleFactorX = (4 - Math.abs(ball.tilt.x)) / 4;
+    scaleFactorY = (4 - Math.abs(ball.tilt.y)) / 4;
+
+    if (ball.tilt.x != 0) {
+        console.log("");
+    }
+
+    for (let item of objects) {
+        item.x *= scaleFactorX;
+        item.y *= scaleFactorY;
+        item.width *= scaleFactorX;
+        item.height *= scaleFactorY;
+        item.x += offset.x;
+        item.y += offset.y;
+    }
+
+    if (ball.tilt.x > 0) {
+        
+        side.width = (sceneWidth - (sceneWidth * scaleFactorX)) / 4.0;
+        side.height = (board.height);
+        side.x = board.x - board.width / 2.0 - side.width;
+        side.y = board.y - board.height / 2.0;
+    }
+    else if (ball.tilt.x < 0) {
+        side.width = (sceneWidth - (sceneWidth * scaleFactorX)) / 4.0;
+        side.height = (board.height);
+        side.x = board.x + board.width / 2.0;
+        side.y = board.y - board.height / 2.0;
+    }
+    else {
+        side.width = 0;
+    }
+
+    if (ball.tilt.y < 0) {
+        
+        topBottom.width = board.width;
+        topBottom.height = (sceneHeight - (sceneHeight * scaleFactorY)) / 4.0;
+        topBottom.x = board.x - board.width / 2.0;
+        topBottom.y = board.y + board.height / 2.0;
+
+        side.height += topBottom.height
+    }
+    else if (ball.tilt.y > 0) {
+        topBottom.width = board.width;
+        topBottom.height = (sceneHeight - (sceneHeight * scaleFactorY)) / 4.0;
+        topBottom.x = board.x - board.width / 2.0;
+        topBottom.y = board.y - board.height / 2.0 - topBottom.height;
+
+        side.height += topBottom.height
+        side.y -= topBottom.height;
+    }
+    else {
+        topBottom.width = 0;
+    }
+}
+
+function unmap() {
+    for (let item of objects) {
+        item.x -= offset.x;
+        item.y -= offset.y;
+        item.width /= scaleFactorX;
+        item.height /= scaleFactorY;
+        item.x = item.x / scaleFactorX;
+        item.y = item.y / scaleFactorY;
+        
+    }
+}
+
+function drawPath() {
+    if (distance(ball.x, ball.lastPosition.x, ball.y, ball.lastPosition.y) > 5) {
+        let newPoint = true;
+
+        for (let point of ball.path) {
+            if (distance(ball.x, point.x, ball.y, point.y) < 5) {
+                newPoint = false;
+            }
+        }
+
+        if (newPoint) {
+            ball.lastPosition = {x:ball.x, y:ball.y};
+            let point = new PIXI.Graphics(); 
+            point.circle(2.5, 2.5, 5);
+            point.lineStyle(4, 0xFFFF00, 1);
+            point.fill(0x000000);
+
+            point.x = ball.x;
+            point.y = ball.y;
+            
+            gameScene.addChild(point);
+            objects.push(point);
+            ball.path.push({x:ball.x, y:ball.y});
+        }
+    }
+}
+
+function generateShape() {
+    shape = [{x:0, y:-100}, {x:80, y:60}, {x:-80, y:60}];
+
+    for (let item in shape) {
+        let temp = (shape[(item + 1) % shape.length]);
+        let vector = {x:(temp.x -shape[item].x), y:(shape[(item + 1) % shape.length].y -shape[item].y) }
+        vector.x /= 100;
+        vector.y /= 100;
+        for (let i = 0; i < 100; i++) {
+            let point = new PIXI.Graphics(); 
+                point.circle(2.5, 2.5, 5);
+                point.lineStyle(4, 0xFFFF00, 1);
+                point.fill(0x808080);
+                point.x = shape[item].x + vector.x * i;
+                point.y = shape[item].y + vector.y * i;
+                gameScene.addChild(point);
+            objects.push(point);
+        }
+    }
+
+    
+}
