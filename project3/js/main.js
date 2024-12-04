@@ -166,22 +166,10 @@ function createLabelsAndButtons() {
     startLabel1.y = 120;
     startScene.addChild(startLabel1);
     
-    // make middle start label
-    let startLabel2 = new PIXI.Text( "R U worthy .. ?", {
-    fill: 0xffffff,
-    fontSize: 32,
-    fontFamily: "Futura",
-    fontStyle: "italic",
-    stroke: 0xff0000,
-    strokeThickness: 6,
-    });
     
-    startLabel2.x = 185;
-    startLabel2.y = 300;
-    startScene.addChild(startLabel2);
 
     // make start game button
-    let startButton = new PIXI.Text("Enter, if you dare!", buttonStyle);
+    let startButton = new PIXI.Text("Click to play...", buttonStyle);
     startButton.x = sceneWidth / 2 - startButton.width / 2;
     startButton.y = sceneHeight - 100;
     startButton.interactive = true;
