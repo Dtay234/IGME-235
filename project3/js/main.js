@@ -364,9 +364,7 @@ function map() {
     scaleFactorX = (4 - Math.abs(ball.tilt.x)) / 4;
     scaleFactorY = (4 - Math.abs(ball.tilt.y)) / 4;
 
-    if (ball.tilt.x != 0) {
-        console.log("");
-    }
+    
 
     for (let item of objects) {
         item.x *= scaleFactorX;
