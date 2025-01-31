@@ -5,13 +5,17 @@
     <title>Document</title>
     <style>
         img {
+            width:48vw;
+        }
+        p {
             width:50%;
         }
     </style>
 </head>
 <body>
+    <h3>Proposal</h3>
     <p>Gravity Art</p>
-    <p>Roll a ball to draw a generated shape. Press WASD keys to "tilt" the platform and roll the ball. Score higher the more accurate
+    <p>Roll a ball to draw a generated shape. Use WASD to "tilt" the platform and roll the ball. Score higher the more accurate
         you are with the path.
     </p>
     <ul>
@@ -28,5 +32,16 @@
 
     <p>Using PixiJS</p>
     <p>Dante Nguyen-Northcott: 2nd year Game Design major</p>
+
+    <h3>Development Process:</h3>
+    <p>I began with making the ball controllable. This is the core of the game and it needed to work well. During this process I switched the controls from WASD to mouse.
+        Using WASD to control the platform felt too easy, the point of this game is to have unweildy controls so it's more of a challenge. Next, I wanted to make the shapes. 
+        I had to keep in mind how I wanted to do the scoring of the path, which made figuring out how to do it was pretty difficult. Since each point on the path and on the shape 
+        are stored, I didn't want to just check each combination of points to see the distance between them, although I did end up doing something not too far off. 
+        The hardest part of this project was making the platform look like it was tilting. I had a lot of work to do making it look like it was 3D. To do this I had to have blocks on each side
+        that are constantly resized to look like the sides of the platform. I also had to scale the objects as well as the distance between them. However, I also had to figure out how to do this
+        without messing up the logic, since it was changing the coordinates of each object every update. To fix this, I used an affine map to convert in between coordinate systems 
+        for drawing and updating. 
+    </p>
 </body>
 </html>

@@ -1,0 +1,14 @@
+body {
+    display:flex;
+    color:white;
+    background-color: black;
+}
+div {
+    margin: 0 5%;
+}
+a:link {
+    color:white;
+}
+a:visited {
+    color:gray;
+}
